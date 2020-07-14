@@ -79,10 +79,8 @@ public class ManagementCenter {
 
             ipTVShopProject.external.Installation installation = new ipTVShopProject.external.Installation();
 
-            String result = ManagementCenterApplication.applicationContext.getBean(ipTVShopProject.external.InstallationService.class)
-                    .installationCancellation(String.valueOf(this.getOrderId()));
-
-            if (result.equals("Approval")) {
+            ManagementCenterApplication.applicationContext.getBean(ipTVShopProject.external.InstallationService.class)
+                    .installationCancellation(installation);
 
                 OrderCancelAccepted orderCancelAccepted = new OrderCancelAccepted();
 
@@ -95,19 +93,7 @@ public class ManagementCenter {
 
                 BeanUtils.copyProperties(this, orderCancelAccepted);
                 orderCancelAccepted.publishAfterCommit();
-            } else {
-                OrderCancelNotAccepted orderCancelNotAccepted = new OrderCancelNotAccepted();
-
-                orderCancelNotAccepted.setId(this.getId());
-                orderCancelNotAccepted.setInstallationAddress(this.getInstallationAddress());
-                orderCancelNotAccepted.setOrderId(this.getId());
-                orderCancelNotAccepted.setStatus("CanceledNotApproved");
-                orderCancelNotAccepted.setEngineerId(this.getEngineerId());
-                orderCancelNotAccepted.setEngineerName(this.getEngineerName());
-
-                BeanUtils.copyProperties(this, orderCancelNotAccepted);
-                orderCancelNotAccepted.publishAfterCommit();
-            }
+          
 
 
         }
