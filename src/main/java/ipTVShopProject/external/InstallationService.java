@@ -12,7 +12,7 @@ import java.util.Date;
 @FeignClient(name="Installation", url="http://localhost:8083")  //url="http://Installation:8080")
 public interface InstallationService {
 
-    @RequestMapping(method= RequestMethod.GET, path="/installations/orderID")
-    public String installationCancellation(String orderID);
+    @RequestMapping(method= RequestMethod.POST, path="/installations")
+    public void installationCancellation(Installation installation);
 
 }
