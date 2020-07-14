@@ -32,23 +32,23 @@ public class ManagementCenter {
 
 
 
-            //Join Ordered(Accepted 변경) 후 Order Accepted 이벤트 호출(InstallationRequest Policy 전달).
+        //Join Ordered(Accepted 변경) 후 Order Accepted 이벤트 호출(InstallationRequest Policy 전달).
         System.out.println(this.getStatus() + "POST TEST");
 
-            if("JOINORDED".equals(this.getStatus())) {
+        if("JOINORDED".equals(this.getStatus())) {
 
-                OrderAccepted orderAccepted = new OrderAccepted();
+            OrderAccepted orderAccepted = new OrderAccepted();
 
-                orderAccepted.setId(this.getId());
-                orderAccepted.setInstallationAddress(this.getInstallationAddress());
-                orderAccepted.setOrderId(this.getId());
-                orderAccepted.setStatus(this.getStatus());
-                orderAccepted.setEngineerId(this.getEngineerId());
-                orderAccepted.setEngineerName(this.getEngineerName());
+            orderAccepted.setId(this.getId());
+            orderAccepted.setInstallationAddress(this.getInstallationAddress());
+            orderAccepted.setOrderId(this.getId());
+            orderAccepted.setStatus(this.getStatus());
+            orderAccepted.setEngineerId(this.getEngineerId());
+            orderAccepted.setEngineerName(this.getEngineerName());
 
-                BeanUtils.copyProperties(this, orderAccepted);
-                orderAccepted.publishAfterCommit();
-            }
+            BeanUtils.copyProperties(this, orderAccepted);
+            orderAccepted.publishAfterCommit();
+        }
     }
 
     @PostUpdate
@@ -78,23 +78,23 @@ public class ManagementCenter {
             System.out.println("TEST1");
 
             ipTVShopProject.external.Installation installation = new ipTVShopProject.external.Installation();
-            
+
             installation.setOrderId(this.getOrderId());
             ManagementCenterApplication.applicationContext.getBean(ipTVShopProject.external.InstallationService.class)
                     .installationCancellation(installation);
 
-                OrderCancelAccepted orderCancelAccepted = new OrderCancelAccepted();
+            OrderCancelAccepted orderCancelAccepted = new OrderCancelAccepted();
 
-                orderCancelAccepted.setId(this.getId());
-                orderCancelAccepted.setInstallationAddress(this.getInstallationAddress());
-                orderCancelAccepted.setOrderId(this.getId());
-                orderCancelAccepted.setStatus("CanceledApproved");
-                orderCancelAccepted.setEngineerId(this.getEngineerId());
-                orderCancelAccepted.setEngineerName(this.getEngineerName());
+            orderCancelAccepted.setId(this.getId());
+            orderCancelAccepted.setInstallationAddress(this.getInstallationAddress());
+            orderCancelAccepted.setOrderId(this.getId());
+            orderCancelAccepted.setStatus("ORDERCANCELED");
+            orderCancelAccepted.setEngineerId(this.getEngineerId());
+            orderCancelAccepted.setEngineerName(this.getEngineerName());
 
-                BeanUtils.copyProperties(this, orderCancelAccepted);
-                orderCancelAccepted.publishAfterCommit();
-          
+            BeanUtils.copyProperties(this, orderCancelAccepted);
+            orderCancelAccepted.publishAfterCommit();
+
 
 
         }
