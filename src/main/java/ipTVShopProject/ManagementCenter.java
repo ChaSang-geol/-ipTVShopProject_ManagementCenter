@@ -78,7 +78,8 @@ public class ManagementCenter {
             System.out.println("TEST1");
 
             ipTVShopProject.external.Installation installation = new ipTVShopProject.external.Installation();
-
+            
+            installation.setOrderId(this.getOrderId());
             ManagementCenterApplication.applicationContext.getBean(ipTVShopProject.external.InstallationService.class)
                     .installationCancellation(installation);
 
