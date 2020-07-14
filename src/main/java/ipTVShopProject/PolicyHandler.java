@@ -9,6 +9,9 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class PolicyHandler{
     @StreamListener(KafkaProcessor.INPUT)
@@ -29,7 +32,7 @@ public class PolicyHandler{
             oa.setOrderId(joinOrdered.getId());
             oa.setInstallationAddress(joinOrdered.getInstallationAddress());
             oa.setId(joinOrdered.getId());
-            oa.setStatus("Accepted");
+            oa.setStatus("JOINORDED");
             oa.setEngineerName("Engineer" + joinOrdered.getId());
             oa.setEngineerId(joinOrdered.getId() + 100);
 
@@ -44,7 +47,8 @@ public class PolicyHandler{
 
         //설치 완료 통보 시 기존 Order ID의 설치 완료 상태(Completed) 저장.
         if(installationCompleted.isMe()) {
-            System.out.println("22222");
+            System.out.println("ORDERID" + installationCompleted.getOrderId());
+            System.out.println("GETID" + installationCompleted.getId());
             try
             {
                 System.out.println("##### listener installcompleted : " + installationCompleted.toJson());
@@ -52,8 +56,6 @@ public class PolicyHandler{
                             .ifPresent(
                                     managementCenter -> {
                                         managementCenter.setStatus(installationCompleted.getStatus());
-                                       // managementCenter.setEngineerId(installationCompleted.getEngineerId());
-                                       // managementCenter.setEngineerName(installationCompleted.getEngineerName());
                                         managementCenterRepository.save(managementCenter);
                                     });
             }
@@ -69,11 +71,15 @@ public class PolicyHandler{
         //취소 요청
         if(cancelOrdered.isMe()){
             try {
-                    System.out.println("##### listener cancelORderd : " + cancelOrdered.toJson());
-                    managementCenterRepository.findById(cancelOrdered.getId()).ifPresent((managementCenter) -> {
-                    managementCenter.setStatus("CancelRequested");
-                    managementCenterRepository.save(managementCenter);
-                });
+                        System.out.println("##### listener cancelORderd : " + cancelOrdered.toJson());
+
+                        Optional<ManagementCenter> mc = managementCenterRepository.findByOrderId(cancelOrdered.getId());
+                        mc.get().setStatus("CancelRequested");
+                        managementCenterRepository.save(mc.get());
+
+
+                        System.out.println("######  test10");
+
             } catch (Exception e){
                 e.printStackTrace();
             }

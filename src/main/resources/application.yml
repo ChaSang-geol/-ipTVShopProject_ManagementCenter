@@ -35,6 +35,7 @@ logging:
   level:
     org.hibernate.type: trace
     org.springframework.cloud: debug
+    root: info
 server:
   port: 8082
 ---

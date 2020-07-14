@@ -1,5 +1,7 @@
 package ipTVShopProject.external;
 
+import java.io.Serializable;
+
 public class Installation {
 
     private Long id;

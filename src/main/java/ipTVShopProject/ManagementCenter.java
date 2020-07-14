@@ -30,8 +30,12 @@ public class ManagementCenter {
     @PostPersist
     public void onPostPersist() {
 
+
+
             //Join Ordered(Accepted 변경) 후 Order Accepted 이벤트 호출(InstallationRequest Policy 전달).
-            if("Accepted".equals(getStatus())) {
+        System.out.println(this.getStatus() + "POST TEST");
+
+            if("JOINORDED".equals(this.getStatus())) {
 
                 OrderAccepted orderAccepted = new OrderAccepted();
 
@@ -51,7 +55,10 @@ public class ManagementCenter {
     public void onPostUpdate() {
 
         //설치 완료 통보 후 Join Completed 이벤트 호출.
-        if (this.getStatus().equals("Completed")) {
+        if (this.getStatus().equals("INSTALLCOMPLETED")) {
+
+            System.out.println("11111111" + this.getStatus());
+
             JoinCompleted jc = new JoinCompleted();
 
             jc.setEngineerId(this.getEngineerId());
@@ -67,14 +74,14 @@ public class ManagementCenter {
         }
         //주문 취소 요청 승인 및 거절 확인을 위한 동기 호
         else  if (this.getStatus().equals("CancelRequested")){
+
+            System.out.println("TEST1");
+
             ipTVShopProject.external.Installation installation = new ipTVShopProject.external.Installation();
-            // mappings goes here
-            System.out.println("111111111");
 
             String result = ManagementCenterApplication.applicationContext.getBean(ipTVShopProject.external.InstallationService.class)
-                    .installationCancellation();
+                    .installationCancellation(String.valueOf(this.getOrderId()));
 
-            System.out.println(result + ": TEST");
             if (result.equals("Approval")) {
 
                 OrderCancelAccepted orderCancelAccepted = new OrderCancelAccepted();
